@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#091522" />
+  <meta name="description" content="Defendyou: aprenda a se proteger contra vazamentos de dados, phishing e golpes digitais." />
+  <title>Defendyou — Sua segurança começa com informação</title>
+  <style>
+    :root {
+      --bg: #07111d;
+      --bg-soft: #0b1a2a;
+      --panel: rgba(17, 36, 55, .78);
+      --panel-solid: #102338;
+      --line: rgba(164, 194, 222, .15);
+      --text: #f1f7fc;
+      --muted: #a6b9ca;
+      --teal: #6de5d1;
+      --teal-dark: #1b9a91;
+      --blue: #7eb6ff;
+      --warning: #ffc875;
+      --danger: #ff8b9b;
+      --radius: 22px;
+      --shadow: 0 24px 70px rgba(0,0,0,.24);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body {
+      margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(ellipse at 78% 5%, rgba(29, 118, 135, .16), transparent 35%),
+                  radial-gradient(ellipse at 12% 28%, rgba(41, 93, 153, .13), transparent 28%), var(--bg);
+      color: var(--text); line-height: 1.6; overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .container { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+    .topline { height: 3px; background: linear-gradient(90deg, var(--teal), var(--blue), #a1f0ae); }
+    header {
+      position: sticky; top: 0; z-index: 10; backdrop-filter: blur(18px);
+      background: rgba(7,17,29,.82); border-bottom: 1px solid var(--line);
+    }
+    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 800; font-size: 1.24rem; letter-spacing: -.04em; }
+    .brand-mark { width: 37px; height: 37px; display: grid; place-items: center; border-radius: 12px; color: #06201f; background: var(--teal); box-shadow: 0 0 26px rgba(109,229,209,.2); }
+    .brand-mark svg { width: 23px; height: 23px; }
+    .brand span span { color: var(--teal); }
+    nav { display: flex; align-items: center; gap: 27px; font-size: .88rem; color: var(--muted); }
+    nav a:hover, nav a:focus-visible { color: var(--teal); }
+    .nav-cta { padding: 10px 16px; border: 1px solid rgba(109,229,209,.35); border-radius: 999px; color: var(--teal); }
+    .menu-toggle { display: none; background: none; border: 1px solid var(--line); color: var(--text); border-radius: 10px; padding: 8px 11px; }
+    .hero { padding: 90px 0 82px; position: relative; }
+    .hero-grid { display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 60px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; text-transform: uppercase; letter-spacing: .14em; font-size: .72rem; font-weight: 800; color: var(--teal); }
+    .eyebrow::before { content: ""; width: 22px; height: 1px; background: var(--teal); }
+    h1 { font-size: clamp(2.7rem, 5.5vw, 5rem); line-height: 1.04; letter-spacing: -.065em; margin: 20px 0 24px; max-width: 690px; }
+    h1 .accent { color: var(--teal); }
+    .hero-copy { max-width: 590px; font-size: 1.08rem; color: var(--muted); margin: 0 0 30px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn { border: 0; border-radius: 13px; padding: 13px 19px; display: inline-flex; gap: 10px; align-items: center; justify-content: center; font-weight: 750; cursor: pointer; transition: transform .2s, background .2s, border-color .2s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { color: #06201f; background: var(--teal); box-shadow: 0 9px 30px rgba(109,229,209,.12); }
+    .btn-primary:hover { background: #91f2e3; }
+    .btn-secondary { color: var(--text); border: 1px solid var(--line); background: rgba(255,255,255,.025); }
+    .btn-secondary:hover { border-color: rgba(126,182,255,.5); }
+    .micro-note { margin-top: 23px; font-size: .78rem; color: #829aae; display: flex; align-items: center; gap: 8px; }
+    .micro-note svg { flex: none; color: var(--teal); }
+    .hero-art { min-height: 390px; position: relative; display: grid; place-items: center; }
+    .halo { position: absolute; width: min(390px, 100%); aspect-ratio: 1; border: 1px solid rgba(109,229,209,.16); border-radius: 50%; box-shadow: 0 0 0 35px rgba(109,229,209,.025), 0 0 0 70px rgba(109,229,209,.018); }
+    .orbit { position: absolute; inset: 5%; border: 1px dashed rgba(126,182,255,.25); border-radius: 50%; animation: spin 55s linear infinite; }
+    .orbit::before, .orbit::after { content: ""; position: absolute; width: 11px; height: 11px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 20px rgba(126,182,255,.8); }
+    .orbit::before { top: 15%; left: 18%; } .orbit::after { right: 8%; bottom: 24%; background: var(--teal); }
+    .shield-card { position: relative; width: 220px; height: 252px; display: grid; place-items: center; filter: drop-shadow(0 22px 50px rgba(109,229,209,.18)); }
+    .shield-card svg { width: 100%; height: 100%; overflow: visible; }
+    .float-card { position: absolute; padding: 12px 15px; border: 1px solid rgba(156,193,221,.2); border-radius: 16px; background: rgba(12,31,48,.91); box-shadow: var(--shadow); backdrop-filter: blur(12px); display: flex; align-items: center; gap: 11px; }
+    .float-card.top { top: 9%; right: 0; animation: float 6s ease-in-out infinite; }
+    .float-card.bottom { left: 0; bottom: 11%; animation: float 7s ease-in-out infinite reverse; }
+    .float-icon { width: 37px; height: 37px; display: grid; place-items: center; border-radius: 12px; background: rgba(109,229,209,.12); color: var(--teal); }
+    .float-icon.blue { background: rgba(126,182,255,.13); color: var(--blue); }
+    .float-card strong { display: block; font-size: .82rem; }
+    .float-card small { display: block; font-size: .7rem; color: var(--muted); }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .trust-strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.018); }
+    .trust-inner { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 23px 0; }
+    .trust-item { display: flex; align-items: center; justify-content: center; gap: 11px; color: var(--muted); font-size: .86rem; }
+    .trust-item svg { color: var(--teal); flex: none; }
+    section { padding: 90px 0; }
+    .section-head { max-width: 690px; margin-bottom: 38px; }
+    .section-head.center { text-align: center; margin-inline: auto; }
+    .section-head.center .eyebrow { justify-content: center; }
+    h2 { font-size: clamp(2rem, 3.8vw, 3.25rem); letter-spacing: -.05em; line-height: 1.12; margin: 13px 0 15px; }
+    .section-head p { color: var(--muted); margin: 0; font-size: 1rem; }
+    .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+    .info-card { padding: 25px; min-height: 230px; border-radius: var(--radius); background: linear-gradient(150deg, rgba(22,47,70,.78), rgba(11,26,42,.8)); border: 1px solid var(--line); transition: transform .2s, border-color .2s; }
+    .info-card:hover { transform: translateY(-4px); border-color: rgba(109,229,209,.28); }
+    .card-icon { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(109,229,209,.1); color: var(--teal); margin-bottom: 19px; }
+    .card-icon.warning { background: rgba(255,200,117,.12); color: var(--warning); }
+    .card-icon.blue { background: rgba(126,182,255,.12); color: var(--blue); }
+    .info-card h3 { font-size: 1.08rem; margin: 0 0 9px; letter-spacing: -.02em; }
+    .info-card p { margin: 0; color: var(--muted); font-size: .91rem; }
+    .inline-callout { display: flex; gap: 15px; padding: 19px 22px; margin-top: 20px; border-radius: 17px; background: rgba(255,200,117,.065); border: 1px solid rgba(255,200,117,.17); color: var(--muted); font-size: .9rem; }
+    .inline-callout svg { color: var(--warning); flex: none; margin-top: 2px; }
+    .inline-callout strong { color: var(--text); }
+    .protection { background: linear-gradient(180deg, rgba(16,35,56,.45), rgba(7,17,29,0)); border-top: 1px solid rgba(164,194,222,.07); border-bottom: 1px solid rgba(164,194,222,.07); }
+    .steps-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 70px; align-items: start; }
+    .steps-intro { position: sticky; top: 110px; }
+    .steps-intro p { color: var(--muted); }
+    .mini-stat { margin-top: 28px; padding: 17px 18px; display: flex; align-items: center; gap: 13px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.02); }
+    .mini-stat .num { color: var(--teal); font-size: 1.5rem; font-weight: 850; }
+    .mini-stat span:last-child { font-size: .83rem; color: var(--muted); }
+    .steps-list { display: grid; gap: 14px; }
+    .step { display: grid; grid-template-columns: 45px 1fr; gap: 16px; padding: 22px; border-radius: 18px; border: 1px solid var(--line); background: rgba(13,31,49,.7); }
+    .step-number { width: 43px; height: 43px; display: grid; place-items: center; color: var(--teal); border-radius: 13px; background: rgba(109,229,209,.09); font-weight: 800; }
+    .step h3 { margin: 0 0 5px; font-size: 1rem; }
+    .step p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
+    .demo-panel { background: rgba(14,32,50,.72); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .demo-top { display: flex; align-items: center; gap: 7px; padding: 15px 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .79rem; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #496479; }
+    .demo-content { padding: 24px; }
+    .message-label { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .13em; color: var(--danger); }
+    .message { padding: 16px; margin: 13px 0 17px; background: rgba(255,139,155,.055); border: 1px solid rgba(255,139,155,.17); border-radius: 14px; font-size: .92rem; }
+    .message strong { color: #ffd4da; }
+    .red-flags { display: grid; gap: 11px; margin: 0; padding: 0; list-style: none; }
+    .red-flags li { display: flex; gap: 10px; color: var(--muted); font-size: .86rem; }
+    .red-flags svg { flex: none; color: var(--danger); margin-top: 3px; }
+    .safe-example { border-color: rgba(109,229,209,.19); }
+    .safe-example .message-label { color: var(--teal); }
+    .safe-example .message { background: rgba(109,229,209,.045); border-color: rgba(109,229,209,.16); }
+    .safe-example .message strong { color: #b3f5eb; }
+    .safe-example .red-flags svg { color: var(--teal); }
+    .quiz { margin-top: 24px; border-radius: var(--radius); padding: 27px; background: linear-gradient(125deg, rgba(22,54,72,.9), rgba(13,34,52,.9)); border: 1px solid rgba(109,229,209,.18); }
+    .quiz-head { display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+    .quiz-head h3 { margin: 0; font-size: 1.17rem; }
+    .quiz-head span { font-size: .74rem; color: var(--teal); background: rgba(109,229,209,.1); padding: 5px 10px; border-radius: 999px; }
+    .quiz-question { font-weight: 650; margin: 18px 0 13px; }
+    .quiz-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .quiz-option { cursor: pointer; padding: 13px 14px; text-align: left; color: var(--muted); background: rgba(255,255,255,.025); border: 1px solid var(--line); border-radius: 12px; transition: .2s; }
+    .quiz-option:hover, .quiz-option:focus-visible { border-color: rgba(109,229,209,.45); color: var(--text); }
+    .quiz-option[aria-pressed="true"] { border-color: var(--teal); color: var(--teal); background: rgba(109,229,209,.075); }
+    .quiz-result { min-height: 24px; margin-top: 14px; color: var(--muted); font-size: .88rem; }
+    .checklist-wrap { display: grid; grid-template-columns: .85fr 1.15fr; gap: 50px; align-items: start; }
+    .checklist-intro p { color: var(--muted); }
+    .progress-card { border-radius: var(--radius); border: 1px solid var(--line); background: rgba(14,32,50,.78); padding: 25px; }
+    .progress-label { display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: .85rem; color: var(--muted); }
+    .progress-label strong { color: var(--teal); font-size: 1rem; }
+    .progress-track { height: 7px; border-radius: 999px; margin: 14px 0 22px; background: #203447; overflow: hidden; }
+    .progress-bar { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--teal-dark), var(--teal)); transition: width .25s ease; }
+    .checklist { display: grid; gap: 0; }
+    .check-row { display: flex; gap: 13px; align-items: flex-start; padding: 14px 0; border-top: 1px solid rgba(164,194,222,.1); cursor: pointer; }
+    .check-row:first-child { border-top: 0; }
+    .check-row input { appearance: none; flex: none; width: 20px; height: 20px; margin: 1px 0 0; border: 1px solid #587184; border-radius: 6px; background: rgba(255,255,255,.025); cursor: pointer; display: grid; place-items: center; }
+    .check-row input:checked { background: var(--teal); border-color: var(--teal); }
+    .check-row input:checked::after { content: "✓"; color: #06201f; font-size: 14px; font-weight: 900; }
+    .check-row span { font-size: .89rem; color: var(--muted); }
+    .check-row input:checked + span { color: #d9e8ef; }
+    .check-note { font-size: .75rem; color: #7891a5; margin: 16px 0 0; }
+    .emergency { padding-top: 35px; }
+    .emergency-box { border-radius: 26px; padding: 38px; border: 1px solid rgba(255,139,155,.2); background: radial-gradient(ellipse at 100% 0, rgba(255,139,155,.08), transparent 35%), rgba(25,31,46,.72); }
+    .emergency-box h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); }
+    .emergency-box > p { max-width: 750px; color: var(--muted); }
+    .emergency-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; margin-top: 24px; }
+    .emergency-item { padding: 18px; border-radius: 15px; background: rgba(255,255,255,.025); border: 1px solid rgba(164,194,222,.1); }
+    .emergency-item .small-num { font-size: .72rem; font-weight: 800; color: var(--danger); letter-spacing: .12em; }
+    .emergency-item h3 { font-size: .98rem; margin: 7px 0; }
+    .emergency-item p { font-size: .83rem; color: var(--muted); margin: 0; }
+    .resources { padding-top: 55px; }
+    .resource-card { display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 24px 26px; background: rgba(14,32,50,.72); border: 1px solid var(--line); border-radius: 18px; margin-top: 12px; }
+    .resource-card h3 { margin: 0 0 4px; font-size: 1rem; }
+    .resource-card p { margin: 0; color: var(--muted); font-size: .85rem; }
+    .resource-link { display: inline-flex; align-items: center; gap: 8px; color: var(--teal); font-weight: 700; font-size: .88rem; white-space: nowrap; }
+    footer { border-top: 1px solid var(--line); padding: 28px 0; color: #8197aa; font-size: .79rem; }
+    .footer-inner { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; }
+    .footer-brand { font-weight: 800; color: var(--text); }
+    .footer-brand span { color: var(--teal); }
+    .disclaimer { max-width: 650px; }
+    :focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
+    @media (max-width: 900px) {
+      .hero-grid { gap: 25px; grid-template-columns: 1fr 0.8fr; }
+      .float-card.top { right: -8px; } .float-card.bottom { left: -10px; }
+      .steps-grid, .checklist-wrap { gap: 28px; }
+      .cards-3 { grid-template-columns: repeat(2, 1fr); }
+      .cards-3 .info-card:last-child { grid-column: span 2; min-height: unset; }
+    }
+    @media (max-width: 680px) {
+      .container { width: min(100% - 30px, 540px); }
+      .nav { min-height: 66px; }
+      .menu-toggle { display: inline-flex; }
+      nav { display: none; position: absolute; top: 65px; left: 0; right: 0; padding: 18px 20px 22px; background: rgba(7,17,29,.98); border-bottom: 1px solid var(--line); flex-direction: column; align-items: stretch; gap: 15px; }
+      nav.open { display: flex; }
+      nav a { padding: 6px 0; }
+      nav .nav-cta { text-align: center; padding: 11px; }
+      .hero { padding: 58px 0 45px; }
+      .hero-grid { display: flex; flex-direction: column; align-items: stretch; gap: 16px; }
+      h1 { font-size: clamp(2.55rem, 12vw, 4rem); }
+      .hero-copy { font-size: 1rem; }
+      .hero-art { min-height: 300px; margin-top: 7px; }
+      .halo { width: 280px; } .orbit { inset: 10%; }
+      .shield-card { width: 165px; height: 190px; }
+      .float-card { padding: 9px 11px; }
+      .float-icon { width: 31px; height: 31px; }
+      .float-card.top { top: 4%; right: 1%; } .float-card.bottom { bottom: 4%; left: 0; }
+      .trust-inner { grid-template-columns: 1fr; gap: 13px; padding: 19px 0; }
+      .trust-item { justify-content: flex-start; }
+      section { padding: 65px 0; }
+      .cards-3 { grid-template-columns: 1fr; }
+      .cards-3 .info-card:last-child { grid-column: auto; }
+      .info-card { min-height: unset; }
+      .steps-grid, .checklist-wrap { grid-template-columns: 1fr; }
+      .steps-intro { position: static; }
+      .step { padding: 18px; }
+      .demo-grid { grid-template-columns: 1fr; }
+      .quiz { padding: 21px; }
+      .quiz-options { grid-template-columns: 1fr; }
+      .emergency-box { padding: 25px 20px; }
+      .emergency-grid { grid-template-columns: 1fr; }
+      .resource-card { align-items: flex-start; flex-direction: column; padding: 21px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topline"></div>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#inicio" aria-label="Defendyou — início">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 20 5.6v5.7c0 5.1-3.4 8.3-8 10.2-4.6-1.9-8-5.1-8-10.2V5.6L12 2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.5 12 2.3 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Defend<span>you</span></span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav">Menu</button>
+      <nav id="mainNav" aria-label="Navegação principal">
+        <a href="#vazamentos">Vazamentos</a>
+        <a href="#protecao">Como se proteger</a>
+        <a href="#golpes">Reconheça golpes</a>
+        <a href="#checklist" class="nav-cta">Minha checklist ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Segurança digital para todos</div>
+          <h1>Seus dados.<br />Sua vida.<br /><span class="accent">Sua defesa.</span></h1>
+          <p class="hero-copy">A internet aproxima pessoas, mas também abre espaço para golpes. Entenda os vazamentos de dados e aprenda hábitos simples para proteger suas contas, seu dinheiro e sua identidade.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#protecao">Aprenda a se proteger <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-secondary" href="#golpes">Identificar um golpe</a>
+          </div>
+          <div class="micro-note">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 20 6v5.5c0 4.7-3.1 7.7-8 9.5-4.9-1.8-8-4.8-8-9.5V6l8-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Informação prática. Privacidade em primeiro lugar.
+          </div>
+        </div>
+        <div class="hero-art" aria-label="Ilustração de um escudo digital protegendo dados" role="img">
+          <div class="halo"></div><div class="orbit"></div>
+          <div class="shield-card">
+            <svg viewBox="0 0 220 252" fill="none" aria-hidden="true">
+              <defs><linearGradient id="shieldGradient" x1="24" y1="12" x2="202" y2="240" gradientUnits="userSpaceOnUse"><stop stop-color="#8BF5E4"/><stop offset="1" stop-color="#2E9FBA"/></linearGradient><linearGradient id="innerGradient" x1="45" y1="34" x2="175" y2="208" gradientUnits="userSpaceOnUse"><stop stop-color="#153D51"/><stop offset="1" stop-color="#0C263B"/></linearGradient></defs>
+              <path d="M110 8 202 43v65c0 61-40 102-92 128C58 210 18 169 18 108V43L110 8Z" fill="url(#shieldGradient)" fill-opacity=".95"/>
+              <path d="M110 25 185 54v54c0 49-31 83-75 107-44-24-75-58-75-107V54l75-29Z" fill="url(#innerGradient)" stroke="#A2F9EB" stroke-opacity=".65" stroke-width="1.5"/>
+              <path d="M81 111V93c0-16 12-29 29-29s29 13 29 29v18" stroke="#83EEDD" stroke-width="8" stroke-linecap="round"/>
+              <rect x="64" y="105" width="92" height="67" rx="15" fill="#6DE5D1"/>
+              <circle cx="110" cy="132" r="8" fill="#0C263B"/><path d="M110 140v12" stroke="#0C263B" stroke-width="6" stroke-linecap="round"/>
+              <path d="m93 183 12 12 24-26" stroke="#B5FFF3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="float-card top"><span class="float-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3 20 6v5c0 5-3.3 8-8 10-4.7-2-8-5-8-10V6l8-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m8.5 12 2.2 2.2 4.7-4.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span><strong>Proteção ativa</strong><small>Boas práticas fazem diferença</small></span></div>
+          <div class="float-card bottom"><span class="float-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="15" r="1.5" fill="currentColor"/></svg></span><span><strong>Dados sob cuidado</strong><small>Menos riscos, mais controle</small></span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip">
+      <div class="container trust-inner">
+        <div class="trust-item"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M12 3 20 6v5c0 5-3.3 8-8 10-4.7-2-8-5-8-10V6l8-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m8.5 12 2.2 2.2 4.7-4.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Prevenção antes do prejuízo</div>
+        <div class="trust-item"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Hábitos simples para o dia a dia</div>
+        <div class="trust-item"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H9l-5 4V5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 9h8M8 12h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Explicações sem complicação</div>
+      </div>
+    </div>
+
+    <section id="vazamentos">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Entenda o risco</div>
+          <h2>O que é um vazamento de dados?</h2>
+          <p>É quando informações pessoais ficam expostas, são acessadas ou divulgadas sem autorização. Isso pode acontecer por falhas de segurança, invasões, erros humanos ou contas comprometidas.</p>
+        </div>
+        <div class="cards-3">
+          <article class="info-card">
+            <div class="card-icon"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><circle cx="8" cy="10" r="2" stroke="currentColor" stroke-width="1.7"/><path d="M5.5 16c.6-1.8 1.4-2.7 2.5-2.7s1.9.9 2.5 2.7M13 9h5M13 13h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+            <h3>Quais dados podem vazar?</h3>
+            <p>Nome, e-mail, telefone, endereço, senhas, documentos e até informações financeiras, dependendo do incidente.</p>
+          </article>
+          <article class="info-card">
+            <div class="card-icon warning"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3 22 20H2L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 9v4m0 3h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+            <h3>O que golpistas podem fazer?</h3>
+            <p>Tentar se passar por você, personalizar mensagens falsas, invadir contas com senhas reutilizadas ou aplicar golpes financeiros.</p>
+          </article>
+          <article class="info-card">
+            <div class="card-icon blue"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="m8.5 12 2.2 2.2 4.8-4.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+            <h3>O que você pode controlar?</h3>
+            <p>Reduzir a exposição, reforçar suas contas, reconhecer tentativas de fraude e agir depressa quando algo parecer errado.</p>
+          </article>
+        </div>
+        <div class="inline-callout"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5m0-8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><div><strong>Importante:</strong> um vazamento não significa automaticamente que alguém invadiu suas contas. Mas é um bom motivo para trocar senhas reutilizadas, ativar autenticação em dois fatores e ficar atento a mensagens suspeitas.</div></div>
+      </div>
+    </section>
+
+    <section class="protection" id="protecao">
+      <div class="container steps-grid">
+        <div class="steps-intro">
+          <div class="eyebrow">Sua defesa diária</div>
+          <h2>Pequenas atitudes. Mais segurança.</h2>
+          <p>Não existe proteção perfeita, mas algumas práticas tornam muito mais difícil para um golpista acessar suas contas ou enganar você.</p>
+          <div class="mini-stat"><span class="num">2FA</span><span>Adicione uma segunda etapa de verificação às contas importantes.</span></div>
+        </div>
+        <div class="steps-list">
+          <article class="step"><div class="step-number">01</div><div><h3>Use senhas fortes e únicas</h3><p>Crie uma senha diferente para cada serviço. Um gerenciador de senhas confiável ajuda a criar e guardar combinações difíceis de adivinhar.</p></div></article>
+          <article class="step"><div class="step-number">02</div><div><h3>Ative a autenticação em dois fatores</h3><p>Quando disponível, prefira aplicativo autenticador ou chave de segurança. Nunca compartilhe códigos de verificação, mesmo com alguém que diga ser do suporte.</p></div></article>
+          <article class="step"><div class="step-number">03</div><div><h3>Desconfie de urgência e pressão</h3><p>“Sua conta será bloqueada agora” ou “faça um Pix para liberar o prêmio” são sinais de alerta. Pare, respire e confirme por um canal oficial.</p></div></article>
+          <article class="step"><div class="step-number">04</div><div><h3>Confira links e remetentes</h3><p>Não confie apenas no logotipo ou no nome exibido. Entre no aplicativo oficial ou digite o endereço conhecido no navegador, em vez de usar o link da mensagem.</p></div></article>
+          <article class="step"><div class="step-number">05</div><div><h3>Mantenha aparelhos atualizados</h3><p>Instale atualizações do sistema e dos aplicativos. Baixe programas apenas de lojas e páginas oficiais e revise as permissões concedidas.</p></div></article>
+          <article class="step"><div class="step-number">06</div><div><h3>Compartilhe menos informações</h3><p>Evite publicar documentos, ingressos, cartões de embarque, localização em tempo real ou detalhes que possam servir para perguntas de recuperação de conta.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="golpes">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Reconheça os sinais</div>
+          <h2>Nem toda mensagem é confiável.</h2>
+          <p>Golpistas podem copiar marcas e usar informações verdadeiras obtidas em outros lugares. Observe o comportamento da mensagem, não apenas sua aparência.</p>
+        </div>
+        <div class="demo-grid">
+          <article class="demo-panel">
+            <div class="demo-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:7px">Exemplo ilustrativo de mensagem suspeita</span></div>
+            <div class="demo-content">
+              <div class="message-label">⚠ Possível golpe</div>
+              <div class="message"><strong>ATENÇÃO! Sua conta será bloqueada em 10 minutos.</strong><br />Clique neste link desconhecido e informe sua senha e o código recebido por SMS para confirmar seus dados.</div>
+              <ul class="red-flags">
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Cria medo e exige ação imediata.</li>
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Pede senha ou código confidencial.</li>
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Tenta levar você a um link não verificado.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="demo-panel safe-example">
+            <div class="demo-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:7px">Uma resposta mais segura</span></div>
+            <div class="demo-content">
+              <div class="message-label">✓ Como agir</div>
+              <div class="message"><strong>Recebeu um alerta sobre sua conta?</strong><br />Não use o link da mensagem. Abra o aplicativo oficial ou digite o endereço que você já conhece e confira se existe algum aviso real.</div>
+              <ul class="red-flags">
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Verifique por um canal independente.</li>
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Nunca informe senhas ou códigos a terceiros.</li>
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Bloqueie e denuncie o remetente suspeito.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+        <div class="quiz" aria-labelledby="quizTitle">
+          <div class="quiz-head"><h3 id="quizTitle">Teste rápido: o que você faria?</h3><span>SIMULAÇÃO EDUCATIVA</span></div>
+          <p class="quiz-question">Uma pessoa que diz ser do banco liga e pede o código que acabou de chegar no seu celular. Qual é a melhor atitude?</p>
+          <div class="quiz-options" role="group" aria-label="Escolha uma resposta">
+            <button class="quiz-option" data-answer="wrong" aria-pressed="false">Passar o código para confirmar minha identidade.</button>
+            <button class="quiz-option" data-answer="right" aria-pressed="false">Desligar e ligar para o número oficial do banco.</button>
+            <button class="quiz-option" data-answer="wrong" aria-pressed="false">Pedir o nome completo de quem está ligando e passar.</button>
+          </div>
+          <div id="quizResult" class="quiz-result" role="status" aria-live="polite">Selecione uma opção para ver a explicação.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="checklist">
+      <div class="container checklist-wrap">
+        <div class="checklist-intro">
+          <div class="eyebrow">Plano de ação</div>
+          <h2>Faça seu check-up de segurança.</h2>
+          <p>Marque as medidas que você já adotou. O indicador é atualizado no seu navegador e não envia suas respostas para nenhum servidor.</p>
+          <a class="btn btn-secondary" href="#recursos">Ver recursos oficiais ↗</a>
+        </div>
+        <div class="progress-card">
+          <div class="progress-label"><span>Seu progresso de proteção</span><strong id="progressText">0 de 7</strong></div>
+          <div class="progress-track" role="progressbar" aria-label="Progresso da checklist" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0" id="progressTrack"><div class="progress-bar" id="progressBar"></div></div>
+          <div class="checklist">
+            <label class="check-row"><input type="checkbox" class="security-check" /><span>Uso senhas diferentes nas contas importantes.</span></label>
+            <label class="check-row"><input type="checkbox" class="security-check" /><span>Ativei autenticação em dois fatores no e-mail e nas contas principais.</span></label>
+            <label class="check-row"><input type="checkbox" class="security-check" /><span>Meu celular, computador e aplicativos estão atualizados.</span></label>
+            <label class="check-row"><input type="checkbox" class="security-check" /><span>Sei como acessar os canais oficiais do meu banco.</span></label>
+            <label class="check-row"><input type="checkbox" class="security-check" /><span>Evito abrir anexos e links inesperados.</span></label>
+            <label class="check-row"><input type="checkbox" class="security-check" /><span>Revisei as sessões conectadas e encerrei acessos que não reconheço.</span></label>
+            <label class="check-row"><input type="checkbox" class="security-check" /><span>Sei como bloquear cartões e recuperar minhas contas em caso de emergência.</span></label>
+          </div>
+          <p class="check-note">Sua marcação vale apenas para esta visita. Não insira senhas ou dados pessoais neste site.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="emergency" id="incidente">
+      <div class="container">
+        <div class="emergency-box">
+          <div class="eyebrow">Se algo der errado</div>
+          <h2>Suspeita de golpe ou conta invadida?</h2>
+          <p>Agir rapidamente pode limitar os danos. Use os canais oficiais dos serviços envolvidos e não pague alguém que prometa recuperar sua conta mediante taxa antecipada.</p>
+          <div class="emergency-grid">
+            <article class="emergency-item"><div class="small-num">PASSO 01</div><h3>Proteja as contas</h3><p>De um dispositivo confiável, altere a senha comprometida e qualquer outra conta que reutilize a mesma senha. Encerre sessões desconhecidas.</p></article>
+            <article class="emergency-item"><div class="small-num">PASSO 02</div><h3>Avise a instituição</h3><p>Contate banco, plataforma ou operadora pelos canais oficiais. Se houver transação suspeita, peça bloqueio e contestação imediatamente.</p></article>
+            <article class="emergency-item"><div class="small-num">PASSO 03</div><h3>Guarde evidências e denuncie</h3><p>Preserve mensagens, comprovantes, datas e protocolos. Considere registrar ocorrência e denunciar o perfil ou conteúdo na própria plataforma.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="resources" id="recursos">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Fontes úteis</div>
+          <h2>Continue se informando.</h2>
+          <p>Procure orientações em canais públicos e oficiais. Evite páginas que prometam revelar dados privados ou “limpar” seu nome em troca de pagamento.</p>
+        </div>
+        <div class="resource-card">
+          <div><h3>Cert.br — Cartilha de Segurança para Internet</h3><p>Orientações sobre fraudes, golpes, privacidade e segurança online.</p></div>
+          <a class="resource-link" href="https://cartilha.cert.br/" target="_blank" rel="noopener noreferrer">Acessar cartilha <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="resource-card">
+          <div><h3>Banco Central do Brasil</h3><p>Informações e orientações sobre segurança no sistema financeiro e prevenção a fraudes.</p></div>
+          <a class="resource-link" href="https://www.bcb.gov.br/" target="_blank" rel="noopener noreferrer">Acessar site oficial <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="resource-card">
+          <div><h3> gov.br — Segurança e privacidade</h3><p>Serviços e orientações de órgãos públicos brasileiros.</p></div>
+          <a class="resource-link" href="https://www.gov.br/" target="_blank" rel="noopener noreferrer">Acessar gov.br <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-brand">Defend<span>you</span> © <span id="year"></span></div>
+      <div class="disclaimer">Conteúdo educativo. Este site não substitui orientações da instituição afetada nem garante proteção absoluta. Não coleta nem solicita dados pessoais.</div>
+      <a href="#inicio">Voltar ao topo ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    // Menu responsivo acessível
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+    menuToggle.addEventListener('click', () => {
+      const open = mainNav.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+    });
+    mainNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      mainNav.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }));
+
+    // Simulador educativo: não recolhe nem envia respostas.
+    const quizOptions = document.querySelectorAll('.quiz-option');
+    const quizResult = document.getElementById('quizResult');
+    quizOptions.forEach(option => option.addEventListener('click', () => {
+      quizOptions.forEach(item => item.setAttribute('aria-pressed', 'false'));
+      option.setAttribute('aria-pressed', 'true');
+      if (option.dataset.answer === 'right') {
+        quizResult.textContent = 'Correto. Não compartilhe códigos de autenticação. Desligue e entre em contato usando o telefone ou aplicativo oficial do banco.';
+        quizResult.style.color = 'var(--teal)';
+      } else {
+        quizResult.textContent = 'Essa atitude pode colocar sua conta em risco. Códigos de verificação são confidenciais; encerre a ligação e confirme a situação por um canal oficial.';
+        quizResult.style.color = 'var(--warning)';
+      }
+    }));
+
+    // Checklist apenas em memória durante esta visita: nada é salvo nem enviado.
+    const checks = [...document.querySelectorAll('.security-check')];
+    const progressText = document.getElementById('progressText');
+    const progressBar = document.getElementById('progressBar');
+    const progressTrack = document.getElementById('progressTrack');
+    function updateProgress() {
+      const checked = checks.filter(input => input.checked).length;
+      progressText.textContent = `${checked} de ${checks.length}`;
+      progressBar.style.width = `${(checked / checks.length) * 100}%`;
+      progressTrack.setAttribute('aria-valuenow', String(checked));
+    }
+    checks.forEach(input => input.addEventListener('change', updateProgress));
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
